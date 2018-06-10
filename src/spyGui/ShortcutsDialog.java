@@ -52,8 +52,10 @@ class InfoTable extends JLabel {
     }
 
     Object[][] data = {
-            {"Ctrl+Alt+R", "Re-Index components"},
-            {"Ctrl+Alt+S", "Start/Stop component inspection"},
-            {"Ctrl+Alt+C", "Copy highlighted component name"}
+            //{"Ctrl+Alt+R", "Re-Index components"},
+            {"F12", "Re-Index components"},
+            {"Shift+F12", "Stop/Start inspection"},
+            {"F11", "Copy highlighted component name"},
+            {"Shift+F11", "Copy highlighted window name"}
     };
 }

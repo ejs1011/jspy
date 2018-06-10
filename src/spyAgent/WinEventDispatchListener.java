@@ -16,7 +16,7 @@ import java.util.ArrayList;
 
 public class WinEventDispatchListener implements AWTEventListener {
     WindowTracker winTrack = new WindowTracker();
-    private static ArrayList<KeyboardFocusManager> activeFocusManagers = new ArrayList<>();
+    private static ArrayList<KeyboardFocusManager> activeFocusManagers = new ArrayList<KeyboardFocusManager>();
 
     public void eventDispatched(AWTEvent evt) {
 

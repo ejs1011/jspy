@@ -35,10 +35,14 @@ public class AboutDialog extends JDialog {
                 + "<center>By Arulraj Samuel</center>"
                 + "<center>Maintained by Robot Team in Nokia</center>"
                 + "</html>", JLabel.CENTER);
+        JLabel label4 = new JLabel("<html>"
+                + "<center>Project was forked by Eric Schneider (ejs1011)</center>"
+                + "</html>", JLabel.CENTER);
 
         label1.setForeground(Color.BLUE);
         label2.setForeground(Color.BLUE);
         label3.setForeground(Color.BLUE);
+        label4.setForeground(Color.BLUE);
 
         JLabel dumm1 = new JLabel("-------------------------", JLabel.CENTER);
         JLabel dumm2 = new JLabel("-----------------------", JLabel.CENTER);
@@ -49,6 +53,8 @@ public class AboutDialog extends JDialog {
         pane.add(label2);
         pane.add(dumm2);
         pane.add(label3);
+        pane.add(dumm2);
+        pane.add(label4);
         pane.add(dumm3);
 
         Utilities.centerContainerComponents(pane);

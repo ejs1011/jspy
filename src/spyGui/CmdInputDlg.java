@@ -11,14 +11,10 @@ import javax.swing.*;
 import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.File;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.io.*;
+import java.net.*;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
 
 public class CmdInputDlg extends JDialog {
@@ -28,6 +24,9 @@ public class CmdInputDlg extends JDialog {
     private CommandComboBox commandCombo = new CommandComboBox();
     private JButton btLaunch = new JButton("Run");
     private JLabel label1 = new JLabel("Cmd to launch", JLabel.LEFT);
+
+    private static final File NULLFILE = new File("");
+    private static Map<String, File> jnlpFiles = new HashMap<String, File>();
 
     public CmdInputDlg() {
         setName("execCmd");
@@ -81,8 +80,29 @@ public class CmdInputDlg extends JDialog {
 
     public void executeCmd() {
         String cmdStr = ((JTextComponent) (commandCombo.getEditor().getEditorComponent())).getText();
+        String origCmdStr = cmdStr;
 
         if (cmdStr != null && !cmdStr.trim().equals("")) {
+            /*Check to see if using javaws.
+            Then check to see if a URL is supplied instead of a local jnlp file
+            Path to executable should not contain spaces*/
+            if (cmdStr.toLowerCase().contains("javaws")) {
+                if (cmdStr.toLowerCase().contains("http")) {
+                    //Make sure there are no spaces in command string.  For example, use "C:\Progra~1" instead of C:\Program Files (x86)"
+                    String commands[] = cmdStr.split(" ");
+                    for (String command : commands) {
+                        System.out.println(command);
+                        if (command.contains("http")) {
+                            //String tacos = getLocalCopy("http://eprnstg2.kroger.com:9081/TRexOneJWS/app/launch.jnlp?target=stg2");
+                            String localJnlp = getLocalCopy(command);
+                            System.out.println("Local jnlp file: " + localJnlp);
+                            cmdStr += " " + localJnlp;
+                        } else {
+                            cmdStr = command;
+                        }
+                    }
+                }
+            }
 
             System.out.println("Executing command :" + cmdStr);
             List<String> arguments = new ArrayList<String>();
@@ -106,14 +126,68 @@ public class CmdInputDlg extends JDialog {
                 Process p = pb.start();
                 Thread readProcTh = new Thread(new ProcessReader(p));
                 readProcTh.start();
-                commandCombo.addCommand(cmdStr);
+                commandCombo.addCommand(origCmdStr);
                 setVisible(false);
             } catch (IOException e) {
                 e.printStackTrace();
                 JOptionPane.showMessageDialog(this, "Could not execute command", "Error", JOptionPane.ERROR_MESSAGE);
             }
-
         }
     }
 
+    //Added method to allow URL or jnlp as webstart argument.  Borrowed much of the code from Marathon project open-source repo.
+    //https://github.com/jalian-systems/marathonv5/blob/master/marathon-java/marathon-java-driver/src/main/java/net/sourceforge/marathon/javadriver/JavaProfile.java
+    private String getLocalCopy(String url) {
+        File file = jnlpFiles.get(url);
+        if (file == null) {
+            file = createJNLPCopy(url);
+            if (file != NULLFILE) {
+                System.out.println("WebStart: Copied remote URL " + url + " to " + file.getAbsolutePath());
+            } else {
+                System.out.println("WebStart: Considering " + url + " as local");
+            }
+            jnlpFiles.put(url, file);
+        }
+        if (file == NULLFILE) {
+            return url;
+        }
+        return file.getAbsolutePath();
+    }
+
+    private File createJNLPCopy(String urlSpec) {
+        File jnlpFile = NULLFILE;
+        OutputStream os = null;
+        InputStream is = null;
+        Object content = null;
+        try {
+            URL url = new URL(urlSpec);
+            URLConnection openConnection = url.openConnection();
+            content = openConnection.getContent();
+            File tempFile = File.createTempFile("jspy", ".jnlp");
+            tempFile.deleteOnExit();
+            os = new FileOutputStream(tempFile);
+            if (content instanceof InputStream) {
+                is = (InputStream) content;
+                byte[] b = new byte[1024];
+                int n;
+                while ((n = is.read(b)) != -1) {
+                    os.write(b, 0, n);
+                }
+            }
+            jnlpFile = tempFile;
+        } catch (Exception e) {
+            System.out.println(e.toString());
+        } finally {
+            try {
+                if (os != null) {
+                    os.close();
+                }
+                if (is != null) {
+                    is.close();
+                }
+            } catch (IOException e) {
+            }
+        }
+        return jnlpFile;
+    }
 }

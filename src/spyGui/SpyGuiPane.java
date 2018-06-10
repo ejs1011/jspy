@@ -42,8 +42,8 @@ public class SpyGuiPane extends JPanel {
         tableModel.addColumn("Name");
         tableModel.addColumn("Value");
 
-        Color evenRowsColor = new Color(176, 196, 222);
-        Color oddRowsColor = new Color(230, 230, 250);
+        final Color evenRowsColor = new Color(176, 196, 222);
+        final Color oddRowsColor = new Color(230, 230, 250);
         table = new JTable() {
             @Override
             public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {

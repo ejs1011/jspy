@@ -78,12 +78,26 @@ public class ListComponent {
         return resultComponentList.toString();
     }
 
+    /*
+        private String componentToString(Component component) {
+            String componentString = component.toString();
+            int indexToStartOfDetails = componentString.indexOf('[');
+            if (indexToStartOfDetails == -1)
+                return componentString;
+            else
+                return componentString.substring(0, indexToStartOfDetails);
+        }
+    */
+    //Modified to also grab window name
     private String componentToString(Component component) {
         String componentString = component.toString();
         int indexToStartOfDetails = componentString.indexOf('[');
-        if (indexToStartOfDetails == -1)
+        if (indexToStartOfDetails == -1) {
+            //System.out.println(componentString);
             return componentString;
-        else
+        } else {
+            //System.out.println(componentString);
             return componentString.substring(0, indexToStartOfDetails);
+        }
     }
 }

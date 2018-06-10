@@ -1,0 +1,11 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="JSpy">
+    <output-path>$PROJECT_DIR$/out/artifacts/JSpy</output-path>
+    <root id="archive" name="JSpy.jar">
+      <element id="module-output" name="jspy" />
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/src/META-INF/MANIFEST.MF" />
+      </element>
+    </root>
+  </artifact>
+</component>

@@ -71,6 +71,8 @@ public class CompMouseListner implements MouseListener {
                 int index = compProps.indexOf("[");
                 String name = compProps.substring(index + 1, compProps.indexOf(','));
                 KeyboardListener.highlightedComponentName = name;
+                //added highlighted window name capture
+                KeyboardListener.highlightedWindowName = winTitle;
                 Component comp = arg0.getComponent();
                 Communicator.writeToServer("Window Title - " + winTitle + ",Index - " + myIndex + ",Instance Of - " + classType + ",Comp. Hierarchy - " + compHierarchy + "," + compProps);
                 highlightedComponentColor = comp.getBackground();
