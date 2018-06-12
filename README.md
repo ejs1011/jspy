@@ -4,6 +4,7 @@
 
 ## Dependencies
 **JSpy** is operating system independent — it just needs Java 8 or newer.
+Note: this forked version is java 6 compliant, so it will build on java 6 or higher.  Functionally, it is identical to the great project maintained by the Nokia team.
 
 ## Building from sources
 We’ll go with IntelliJ for compiling this
@@ -39,3 +40,11 @@ When started go into File \> Execute Command
 
 
 Execute Command: `javaws C:\path\to\file.jnlp`
+or `javaws "http://pathToDownloadYourJnlp.jnlp"`
+
+## About this Fork
+This project was forked to accommodate an environment that still requires Java 6.
+Other changes include:
+1. Hot keys were remapped to not activate the application being spied, which used the Control key to activate menus.
+2. Added ability to download and execute jnlp by specifying a URL instead of local file path.
+
